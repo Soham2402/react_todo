@@ -1,9 +1,23 @@
-import React from 'react'
-import notes from '../assets/data.js'
-import ListItem from '../components/ListItem.jsx'
+import React, {useState, useEffect} from 'react'
 
+import ListItem from '../components/ListItem.jsx'
+import AddIcon  from '../components/AddIcon.jsx'
 
 const NotesPage = () => {
+  
+  const [notes, setNotes] = useState([])
+
+  useEffect(()=>{
+    getNotes()
+  },[])
+
+  
+  let getNotes = async () => {
+    let response = await fetch("http://localhost:3000/notes")
+    let data = await response.json()
+    setNotes(data)
+  }
+
   
   return (
     <div className='notes'>
@@ -15,9 +29,12 @@ const NotesPage = () => {
       
         <div className="notes-list">
           {notes.map(note => {
-            return <ListItem  note = {note} />
+            return <ListItem  key={note.id} note = {note} />
           })}
         </div>
+
+          <AddIcon />
+
       </div>
   )
 }
